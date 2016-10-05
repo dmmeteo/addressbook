@@ -1,3 +1,7 @@
+<?php 
+# init data list
+require_once '../data/list.data.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,12 +40,25 @@
 
 			<tbody> <!-- items -->
 				<?php //view
-				require_once '../data/list.data.php';
 				foreach ($user_list as $item){
 					echo($item->print_item());
 				}?>
 			</tbody>
 
+			<tfoot>
+				<tr>
+					<td style="text-align: left;" colspan="3">Show: 
+						<a href="?limit=2&page=1">2</a> |
+						<a href="?limit=5&page=1">5</a> |
+						<a href="?limit=10&page=1">10</a> |
+						<a href="?limit=<?php echo $count_rows; ?>&page=1">All</a>
+						 pre page
+					</td>
+					<td style="text-align: right;" colspan="3">
+						<?php echo $pagination; ?>
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 
 	</div>

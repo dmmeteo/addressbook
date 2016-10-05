@@ -1,4 +1,7 @@
 <?php
+# init strip_data()
+require_once '../components/strip_data.php';
+
 /**
 * class for make upload query
 */
@@ -7,9 +10,10 @@ class upload{
 	* default query property
 	*/
 	public $edit_query = 'UPDATE user SET ';
-	public $add_query = 'INSERT INTO user ';
+	public $add_query = 'INSERT INTO user (first_name, last_name, email, country, city, note, photo) VALUES (';
+	public $success_message = '';
+	public $items_array;
 	public $error_file = '';
-
 
 	/*
 	* get properties form db
@@ -18,43 +22,113 @@ class upload{
 	public function check_GET($GET){
 		session_start();
 		if (isset($GET)) {
-			$_SESSION['user'] = $GET;
-			return 'session start>user: '.$GET;
+			# security(only integers must be in $_SESSION['user'])
+			$number = intval($GET);
+			# init session
+			$_SESSION['user'] = $number;
 
-		} elseif (!empty($_SESSION['user'])) {
+		} elseif ( (!empty($_SESSION['user'])) && ($_POST['submit'] === 'submit')) {
+			# set start query string
 			$start_query .= $this->edit_query;
-
-			# kill session 
+			# set items in query string
+			$query = $this->check_edit_POST($start_query);
+			# kill session
 			$_SESSION['user'] = '';
-
-			$query = $this->check_POST($start_query);
 			return $query;
 
-		} elseif (empty($_SESSION['user'])){
+		} elseif ( (empty($_SESSION['user'])) && ($_POST['submit'] === 'submit')){
+			# set start query string
 			$start_query .= $this->add_query;
-
-			$query = $this->check_POST($start_query);
+			# set items in query string
+			$query = $this->check_add_POST($start_query);
 			return $query;
+
+		} elseif ( (empty($GET)) && (!empty($_SESSION['user'])) ) {
+			# kill session
+			$_SESSION['user'] = '';
+			echo '!isset($GET)';
 		}
 	}
 	/*
-	* private function for make query
+	* private function for make edit query
 	* return string
 	*/
-	private function check_POST($start_query){
+	private function check_edit_POST($start_query){
 		$result = $start_query;
+		# add photo
+		if (!empty($_FILES['file']['name'])){
+			$photo = $this->uplode_file();
+			$result .= " photo='$photo',";
+		}
 		# add values
 		foreach ($_POST as $key => $value) {
-			$result .= " $key='$value'";
-		}
-		# add photo
-		if (isset($_FILES['file'])){
-			$photo = $this->uplode_file();
-			$result .= " photo='$photo'";
+			# strip_data and add items
+			$key = strip_data($key);
+			$value = strip_data($value);
+
+			# validation fanction
+			if ( ($key === 'first_name') && (empty($value))
+				|| ($key === 'last_name') && (empty($value))
+				|| ($key === 'email') && (empty($value))
+				|| ($key === 'country') && (empty($value))
+				|| ($key === 'city') && (empty($value)) ){
+				$this->success_message = "<br/><span style='color: red;'>$key is required</span>";
+				# rememder item to set in form to other try
+				foreach ($_POST as $key => $value) {
+					$key = strip_data($key);
+					$value = strip_data($value);
+					$this->items_array[$key] = $value;
+				}
+				return false;
+			}
+
+			$result .= " $key='$value',";
 		}
 		# delete submit
-		$result = preg_replace("~(.+)(submit='submit')(.+)~", '$1$3', $result);
+		$result = preg_replace("~(.+)(, submit='submit',)(.?+)~", '$1$3', $result);
+		# set user id where update items
+		$result .= ' WHERE id='.$_SESSION['user'];
+		# set success_message
+		$this->success_message = "<br/><p style='color: green;'>User is edit!</p>";
 
+		return $result;
+	}
+	/*
+	* private function for make add query
+	* return string
+	*/
+	private function check_add_POST($start_query){
+		$result = $start_query;
+		foreach ($_POST as $key => $value) {
+			# security
+			$value = strip_data($value);
+
+			# validation fanction
+			if ( ($key === 'first_name') && (empty($value))
+				|| ($key === 'last_name') && (empty($value))
+				|| ($key === 'email') && (empty($value))
+				|| ($key === 'country') && (empty($value))
+				|| ($key === 'city') && (empty($value)) ){
+				$this->success_message = "<br/><span style='color: red;'>$key is required</span>";
+				# rememder item to set in form to other try
+				foreach ($_POST as $key => $value) {
+					$key = strip_data($key);
+					$value = strip_data($value);
+					$this->items_array[$key] = $value;
+				}
+				return false;
+			}
+
+			# add values
+			$result .= " '$value',";
+		}
+		# add photo
+		$photo = $this->uplode_file();
+		$result .= " '$photo')";
+		# delete submit
+		$result = preg_replace("~(.+)('submit',)(.?+)~", '$1$3', $result);
+		# set success_message
+		$this->success_message = "<br/><p style='color: green;'>New is add!</p>";
 		return $result;
 	}
 	/*

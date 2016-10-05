@@ -1,0 +1,32 @@
+# Temporary folder
+.tmp/
+
+# Node Modules
+node_modules/
+
+# Bower Components
+bower_components/
+
+# JetBrains IDEs
+.idea/
+
+# Log files
+*.log
+
+# Thumbnail cache files
+Thumbs.db
+._*
+
+# Folder view configuration files
+Desktop.ini
+.DS_Store
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows shortcuts
+*.lnk
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes

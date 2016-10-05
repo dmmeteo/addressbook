@@ -1,12 +1,12 @@
-<?php 
+<?php
 /**
 * Class for auth in admin panel
 */
 class auth{
 	
-	protected $user_name = 'admin';
-	protected $password  = 'admin';
-	protected $session   = 'success';
+	private $user_name = 'admin';
+	private $password  = 'admin';
+	private $session   = 'success';
 	/*
 	* check login & password
 	* @return booleon

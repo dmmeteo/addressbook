@@ -41,7 +41,7 @@ class adminList extends userList{
 		echo '<td>'.$this->first_name.' '.$this->last_name.'</td>';
 		echo '<td>'.$this->country.'</td>';
 		echo '<td>'.$this->city.'</td>';
-		echo '<td><a href="">[edit]</a></td>';
+		echo '<td><a href="edit.php?user='.$this->id.'">[edit]</a></td>';
 		echo '<td><a onclick="return confirm(\'Do you really want to delete the record?\');" href=?del='.$this->id.'>[delete]</a></td>';
 		echo '</tr>';
 	}
