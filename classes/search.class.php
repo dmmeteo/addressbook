@@ -22,11 +22,11 @@ class search{
 			$value = strip_data($value);
 
 			# country search
-			if ( ($key == 'country') && (!empty($value)) ){
+			if ( ($key == 'country') && (!empty($value))){
 				$result .= " && $key='$value'";
 
 			# city search
-			} elseif ( ($key == 'city') && (!empty($value)) ){
+			} elseif ( ($key == 'city') && (!empty($value))){
 				$result .= " && $key='$value'";
 
 			# kayword search

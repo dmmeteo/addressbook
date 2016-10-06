@@ -46,7 +46,6 @@ class upload{
 		} elseif ( (empty($GET)) && (!empty($_SESSION['user'])) ) {
 			# kill session
 			$_SESSION['user'] = '';
-			echo '!isset($GET)';
 		}
 	}
 	/*
@@ -70,8 +69,8 @@ class upload{
 			if ( ($key === 'first_name') && (empty($value))
 				|| ($key === 'last_name') && (empty($value))
 				|| ($key === 'email') && (empty($value))
-				|| ($key === 'country') && (empty($value))
-				|| ($key === 'city') && (empty($value)) ){
+				|| ($key === 'country') && ($key['country'] != 0)
+				|| ($key === 'city') && ($key['city'] != 0) ){
 				$this->success_message = "<br/><span style='color: red;'>$key is required</span>";
 				# rememder item to set in form to other try
 				foreach ($_POST as $key => $value) {

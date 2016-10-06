@@ -24,13 +24,14 @@ require_once '../data/delete.data.php';
 
 		<form action="index.php" method="get">
 			kayword: <input type="text" name="kayword">
-			country: <select name="country">
-				<option value="">::ALL::</option>
+			country: <select name="country" id="country_id">
+				<option value="0">--Select Country--</option>
 				<option value="USA">USA</option>
+				<option value="Ukraine">Ukraine</option>
+				<option value="Canada">Canada</option>
 			</select>
-			city: <select name="city">
-				<option value="">::ALL::</option>
-				<option value="New York">New York</option>
+			city: <select name="city" id="city_id" disabled="disabled">
+				<option value="0">--Select City--</option>
 			</select><br><br>
 			<input type="submit" name="submit" value="search">
 		</form><br><br>
@@ -69,5 +70,7 @@ require_once '../data/delete.data.php';
 		</table>
 
 	</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/selects.js"></script>
 </body>
 </html>

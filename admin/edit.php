@@ -40,12 +40,17 @@ require_once '../data/upload.data.php';
 			value="<?php echo $userById->email . $upload ->items_array['email']; ?>">
 
 			<br><br><span style="color: red;">*</span>
-			country: <input style="float: right;" type="text" name="country" 
-			value="<?php echo $userById->country . $upload ->items_array['country']; ?>">
+			country: <select style="float: right; width: 173px;" name="country" id="country_id">
+				<option value="0">--Select Country--</option>
+				<option value="USA">USA</option>
+				<option value="Ukraine">Ukraine</option>
+				<option value="Canada">Canada</option>
+			</select>
 
 			<br><br><span style="color: red;">*</span> 
-			city: <input style="float: right;" type="text" name="city" 
-			value="<?php echo $userById->city . $upload ->items_array['city']; ?>">
+			city: <select style="float: right; width: 173px;" name="city" id="city_id" disabled="disabled">
+				<option value="0">--Select City--</option>
+			</select>
 
 			<br><br><input style="width: 300px;" type="file" id="upload" name="file">
 			<br><br><div id="preview" style="width: 150px; height: 150px; border: 1px dashed #333;">
@@ -61,28 +66,8 @@ require_once '../data/upload.data.php';
 		<br><br><a href="/admin/">Back to the list</a>
 	</div>
 
-	<script>
-		(function() {
-			var inpElem = document.getElementById('upload'),
-					divElem = document.getElementById('preview');
-			inpElem.addEventListener("change", function(e) {
-					preview(this.files[0]);
-			});
-			function preview(file) {
-				if ( file.type.match(/image.*/) ) {
-					var reader = new FileReader(), img;
-					reader.addEventListener("load", function(event) {
-						imgOld = document.getElementById('old');
-						img = document.createElement('img');
-						img.src = event.target.result;
-						img.setAttribute('style', 'width: 150px; height: 150px;');
-						img.setAttribute('id', 'old');
-						divElem.replaceChild(img, imgOld);
-					});
-					reader.readAsDataURL(file);
-				}
-			}
-		})();
-	</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../js/selects.js"></script>
+<script type="text/javascript" src="../js/preview.js"></script>
 </body>
 </html>
